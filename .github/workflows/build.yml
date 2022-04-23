@@ -46,8 +46,8 @@ jobs:
               run: |
                   cd ./node
                   ./android-configure
-                  make
-                  make-install
+                  make -j$(nproc --all)
+                  make install
             - uses: benjlevesque/short-sha@v1.2
               id: short-sha
               with:
