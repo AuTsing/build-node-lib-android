@@ -13,45 +13,45 @@ env:
 jobs:
     build:
         runs-on: ubuntu-20.04
-    steps:
-        - uses: actions/checkout@v3
-        - uses: actions/setup-python@v3
-          with:
-              python-version: '3.x'
-              architecture: 'x64'
-        - name: Set up tools
-          run: sudo apt install -y build-essential
-        - uses: nttld/setup-ndk@v1
-          id: setup-ndk
-          with:
-              ndk-version: r23b
-        - name: Set up NodeJS
-          run: |
-              curl -O https://nodejs.org/dist/${{ env.NODE_VERSION }}/node-${{ env.NODE_VERSION }}.tar.gz
-              tar -zxf ./node-${{ env.NODE_VERSION }}.tar.gz -C ./
-              mv node-${{ env.NODE_VERSION }} node
-              rm ./node-${{ env.NODE_VERSION }}.tar.gz
-        - name: Patch files
-          run: |
-              cd ./node
-              patch -p1 < ../patches/node-${{ env.NODE_VERSION }}.patchc
-              cd ..
-        - uses: actions/cache@v3
-          with:
-              path: ./node/out
-              key: node-out-android-${{ env.NODE_VERSION }}-arm64
-        - name: Build NodeJS
-          run: |
-              cd ./node
-              ./android-configure
-              make
-              make-install
-        - uses: benjlevesque/short-sha@v1.2
-          id: short-sha
-          with:
-              length: 7
-        - name: Upload a Build Artifact
-          uses: actions/upload-artifact@v3
-          with:
-              name: libnode-${{ env.NODE_VERSION }}-${{ steps.short-sha.outputs.sha }}-android-arm64.zip
-              path: ../dist/arm64
+        steps:
+            - uses: actions/checkout@v3
+            - uses: actions/setup-python@v3
+              with:
+                  python-version: '3.x'
+                  architecture: 'x64'
+            - name: Set up tools
+              run: sudo apt install -y build-essential
+            - uses: nttld/setup-ndk@v1
+              id: setup-ndk
+              with:
+                  ndk-version: r23b
+            - name: Set up NodeJS
+              run: |
+                  curl -O https://nodejs.org/dist/${{ env.NODE_VERSION }}/node-${{ env.NODE_VERSION }}.tar.gz
+                  tar -zxf ./node-${{ env.NODE_VERSION }}.tar.gz -C ./
+                  mv node-${{ env.NODE_VERSION }} node
+                  rm ./node-${{ env.NODE_VERSION }}.tar.gz
+            - name: Patch files
+              run: |
+                  cd ./node
+                  patch -p1 < ../patches/node-${{ env.NODE_VERSION }}.patchc
+                  cd ..
+            - uses: actions/cache@v3
+              with:
+                  path: ./node/out
+                  key: node-out-android-${{ env.NODE_VERSION }}-arm64
+            - name: Build NodeJS
+              run: |
+                  cd ./node
+                  ./android-configure
+                  make
+                  make-install
+            - uses: benjlevesque/short-sha@v1.2
+              id: short-sha
+              with:
+                  length: 7
+            - name: Upload a Build Artifact
+              uses: actions/upload-artifact@v3
+              with:
+                  name: libnode-${{ env.NODE_VERSION }}-${{ steps.short-sha.outputs.sha }}-android-arm64.zip
+                  path: ../dist/arm64
