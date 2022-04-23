@@ -41,6 +41,8 @@ jobs:
                   path: ./node/out
                   key: node-out-android-${{ env.NODE_VERSION }}-arm64
             - name: Build NodeJS
+              env:
+                  NDK_PATH: ${{ steps.setup-ndk.outputs.ndk-path }}
               run: |
                   cd ./node
                   ./android-configure
