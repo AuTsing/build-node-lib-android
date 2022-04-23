@@ -34,7 +34,7 @@ jobs:
             - name: Patch files
               run: |
                   cd ./node
-                  patch -p1 < ../patches/node-${{ env.NODE_VERSION }}.patchc
+                  patch -p1 < ../patches/node-${{ env.NODE_VERSION }}.patch
                   cd ..
             - uses: actions/cache@v3
               with:
