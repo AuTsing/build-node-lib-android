@@ -1,4 +1,4 @@
-name: Build
+name: Main
 
 on:
     push:
@@ -33,9 +33,8 @@ jobs:
                   rm ./node-${{ env.NODE_VERSION }}.tar.gz
             - name: Patch files
               run: |
-                  cd ./node
-                  patch -p1 < ../patches/node-${{ env.NODE_VERSION }}.patch
-                  cd ..
+                  chmod +x ./scripts/patch.sh
+                  ./scripts/patch.sh
             - uses: actions/cache@v3
               with:
                   path: ./node/out
@@ -44,10 +43,8 @@ jobs:
               env:
                   NDK_PATH: ${{ steps.setup-ndk.outputs.ndk-path }}
               run: |
-                  cd ./node
-                  ./android-configure
-                  make -j$(nproc --all)
-                  make install
+                  chmod +x ./scripts/build.sh
+                  ./scripts/build.sh
             - uses: benjlevesque/short-sha@v1.2
               id: short-sha
               with:
