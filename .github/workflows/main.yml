@@ -49,8 +49,8 @@ jobs:
               id: short-sha
               with:
                   length: 7
-            - name: Upload a Build Artifact
-              uses: actions/upload-artifact@v3
+            - uses: actions/upload-artifact@v3
               with:
                   name: libnode-${{ env.NODE_VERSION }}-${{ steps.short-sha.outputs.sha }}-android-arm64.zip
-                  path: ../dist/arm64
+                  path: ./build
+                  retention-days: 1
