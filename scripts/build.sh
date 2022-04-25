@@ -3,7 +3,7 @@
 workspace=$(realpath "$(dirname "$0")"/../)
 
 arch="arm64"
-sdk_ver="28"
+sdk_ver="26"
 
 cd "$workspace/node"
 ./android-configure "$NDK_PATH" "$arch" "$sdk_ver"
