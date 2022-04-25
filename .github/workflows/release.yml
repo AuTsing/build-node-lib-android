@@ -1,0 +1,28 @@
+name: Release
+
+on:
+    workflow_dispatch:
+        inputs:
+            nodeVersion:
+                description: 'Node.js version'
+                default: '16.14.2'
+                required: true
+
+jobs:
+    Build:
+        uses: ./.github/workflows/build.yml
+    Release:
+        runs-on: ubuntu-latest
+        needs: Build
+        steps:
+            - uses: actions/download-artifact@v3
+              with:
+                  path: ./
+            - name: Zip Artifacts
+              run: |
+                  mkdir archived
+                  ls -d1 libnode-* | xargs -I name sh -c "cd name; zip -r ../archived/name ./; cd .."
+            - uses: softprops/action-gh-release@v1
+              with:
+                  files: './archived/*.zip'
+                  fail_on_unmatched_files: true

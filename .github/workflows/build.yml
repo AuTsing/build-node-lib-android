@@ -1,14 +1,13 @@
-name: Main
+name: Build
 
 on:
-    push:
-        branches: [main]
-    pull_request:
-        branches: [main]
+    workflow_call:
     workflow_dispatch:
-
-env:
-    NODE_VERSION: v16.14.2
+        inputs:
+            nodeVersion:
+                description: 'Node.js version'
+                default: '16.14.2'
+                required: true
 
 jobs:
     build:
@@ -27,10 +26,10 @@ jobs:
                   ndk-version: r23b
             - name: Set up NodeJS
               run: |
-                  curl -O https://nodejs.org/dist/${{ env.NODE_VERSION }}/node-${{ env.NODE_VERSION }}.tar.gz
-                  tar -zxf ./node-${{ env.NODE_VERSION }}.tar.gz -C ./
-                  mv node-${{ env.NODE_VERSION }} node
-                  rm ./node-${{ env.NODE_VERSION }}.tar.gz
+                  curl -O https://nodejs.org/dist/${{ github.event.inputs.nodeVersion }}/node-${{ github.event.inputs.nodeVersion }}.tar.gz
+                  tar -zxf ./node-${{ github.event.inputs.nodeVersion }}.tar.gz -C ./
+                  mv node-${{ github.event.inputs.nodeVersion }} node
+                  rm ./node-${{ github.event.inputs.nodeVersion }}.tar.gz
             - name: Patch files
               run: |
                   chmod +x ./scripts/patch.sh
@@ -38,7 +37,7 @@ jobs:
             - uses: actions/cache@v3
               with:
                   path: ./node/out
-                  key: node-out-android-${{ env.NODE_VERSION }}-arm64
+                  key: node-out-android-${{ github.event.inputs.nodeVersion }}-arm64
             - name: Build NodeJS
               env:
                   NDK_PATH: ${{ steps.setup-ndk.outputs.ndk-path }}
@@ -51,6 +50,6 @@ jobs:
                   length: 7
             - uses: actions/upload-artifact@v3
               with:
-                  name: libnode-${{ env.NODE_VERSION }}-${{ steps.short-sha.outputs.sha }}-android-arm64
+                  name: libnode-${{ github.event.inputs.nodeVersion }}-${{ steps.short-sha.outputs.sha }}-android-arm64
                   path: ./build
                   retention-days: 1
