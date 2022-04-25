@@ -6,7 +6,7 @@ on:
         inputs:
             nodeVersion:
                 description: 'Node.js version'
-                default: '16.14.2'
+                default: 'v16.14.2'
                 required: true
 
 jobs:
