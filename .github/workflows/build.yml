@@ -3,14 +3,12 @@ name: Build
 on:
     workflow_call:
     workflow_dispatch:
-        inputs:
-            nodeVersion:
-                description: 'Node.js version'
-                default: 'v16.14.2'
-                required: true
 
 jobs:
     build:
+        strategy:
+            matrix:
+                version: [v16.15.0, v18.0.0]
         runs-on: ubuntu-20.04
         steps:
             - uses: actions/checkout@v3
@@ -26,10 +24,10 @@ jobs:
                   ndk-version: r23b
             - name: Set up NodeJS
               run: |
-                  curl -O https://nodejs.org/dist/${{ github.event.inputs.nodeVersion }}/node-${{ github.event.inputs.nodeVersion }}.tar.gz
-                  tar -zxf ./node-${{ github.event.inputs.nodeVersion }}.tar.gz -C ./
-                  mv node-${{ github.event.inputs.nodeVersion }} node
-                  rm ./node-${{ github.event.inputs.nodeVersion }}.tar.gz
+                  curl -O https://nodejs.org/dist/${{ matrix.version }}/node-${{ matrix.version }}.tar.gz
+                  tar -zxf ./node-${{ matrix.version }}.tar.gz -C ./
+                  mv node-${{ matrix.version }} node
+                  rm ./node-${{ matrix.version }}.tar.gz
             - name: Patch files
               run: |
                   chmod +x ./scripts/patch.sh
@@ -37,7 +35,7 @@ jobs:
             - uses: actions/cache@v3
               with:
                   path: ./node/out
-                  key: node-out-android-${{ github.event.inputs.nodeVersion }}-arm64
+                  key: node-out-android-${{ matrix.version }}-arm64
             - name: Build NodeJS
               env:
                   NDK_PATH: ${{ steps.setup-ndk.outputs.ndk-path }}
@@ -50,6 +48,6 @@ jobs:
                   length: 7
             - uses: actions/upload-artifact@v3
               with:
-                  name: libnode-${{ github.event.inputs.nodeVersion }}-${{ steps.short-sha.outputs.sha }}-android-arm64
+                  name: libnode-${{ matrix.version }}-${{ steps.short-sha.outputs.sha }}-android-arm64
                   path: ./build
                   retention-days: 1

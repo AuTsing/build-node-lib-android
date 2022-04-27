@@ -1,0 +1,11 @@
+--- node-v16.14.2.orig/android-configure	2022-03-18 05:59:24.000000000 +0800
++++ node-v16.14.2/android-configure	2022-04-25 00:23:19.192893200 +0800
+@@ -81,5 +81,7 @@
+         --dest-os=android \
+         --without-snapshot \
+         --openssl-no-asm \
+-        --cross-compiling
++        --cross-compiling \
++        --without-inspector \
++        --shared
+ fi

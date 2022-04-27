@@ -1,12 +1,9 @@
 name: Release
 
 on:
-    workflow_dispatch:
-        inputs:
-            nodeVersion:
-                description: 'Node.js version'
-                default: 'v16.14.2'
-                required: true
+    push:
+        tags:
+            - 'v*'
 
 jobs:
     Build:
@@ -23,7 +20,7 @@ jobs:
                   mkdir archived
                   ls -d1 libnode-* | xargs -I name sh -c "cd name; zip -r ../archived/name ./; cd .."
             - uses: softprops/action-gh-release@v1
-              if: startsWith(github.ref, 'refs/tags/')
               with:
                   files: './archived/*.zip'
                   fail_on_unmatched_files: true
+                  generate_release_notes: true
