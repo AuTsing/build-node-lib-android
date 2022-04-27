@@ -8,4 +8,3 @@ for patch in $patches; do
     echo "Applying patch: $patch"
     patch -p1 <"$patch"
 done
-cat "./android-configure"
