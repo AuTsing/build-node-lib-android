@@ -29,6 +29,8 @@ jobs:
                   mv node-${{ matrix.version }} node
                   rm ./node-${{ matrix.version }}.tar.gz
             - name: Patch files
+              env:
+                  NODE_VERSION: ${{ matrix.version }}
               run: |
                   chmod +x ./scripts/patch.sh
                   ./scripts/patch.sh
