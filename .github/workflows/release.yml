@@ -21,6 +21,6 @@ jobs:
                   ls -d1 libnode-* | xargs -I name sh -c "cd name; zip -r ../archived/name ./; cd .."
             - uses: softprops/action-gh-release@v1
               with:
-                  files: './archived/*.zip'
+                  files: './archived/libnode-*'
                   fail_on_unmatched_files: true
                   generate_release_notes: true
