@@ -1,0 +1,25 @@
+diff '--color=auto' -uNr node-v17.8.0.orig/tools/v8_gypfiles/v8.gyp node-v17.8.0/tools/v8_gypfiles/v8.gyp
+--- node-v17.8.0.orig/tools/v8_gypfiles/v8.gyp	2022-03-26 22:11:04.985459285 +0530
++++ node-v17.8.0/tools/v8_gypfiles/v8.gyp	2022-03-26 22:12:35.825459250 +0530
+@@ -1092,6 +1092,7 @@
+             '<(V8_ROOT)/src/base/platform/platform-posix.h',
+             '<(V8_ROOT)/src/base/platform/platform-posix-time.cc',
+             '<(V8_ROOT)/src/base/platform/platform-posix-time.h',
++	    '<(V8_ROOT)/src/base/platform/platform-linux.h',
+           ],
+           'link_settings': {
+             'target_conditions': [
+@@ -1581,7 +1582,12 @@
+           }],
+           ['clang or OS!="win"', {
+             'conditions': [
+-              ['_toolset == "host" and host_arch == "x64" or _toolset == "target" and target_arch=="x64"', {
++              ['_toolset == "host" and host_arch == "x64" and (target_arch == "arm" or target_arch == "ia32")', {
++                'sources': [
++                  '<(V8_ROOT)/src/heap/base/asm/ia32/push_registers_asm.cc',
++                ],
++              }],
++              ['_toolset == "host" and host_arch == "x64" and (target_arch == "x64" or target_arch == "arm64") or (_toolset == "target" and target_arch == "x64")', {
+                 'sources': [
+                   '<(V8_ROOT)/src/heap/base/asm/x64/push_registers_asm.cc',
+                 ],
