@@ -1,0 +1,29 @@
+diff '--color=auto' -uNr node-v17.8.0.orig/deps/uv/uv.gyp node-v17.8.0/deps/uv/uv.gyp
+--- node-v17.8.0.orig/deps/uv/uv.gyp	2022-03-26 22:11:02.605459286 +0530
++++ node-v17.8.0/deps/uv/uv.gyp	2022-03-26 22:12:03.225459263 +0530
+@@ -40,7 +40,7 @@
+     {
+       'target_name': 'libuv',
+       'type': '<(uv_library)',
+-      'include_dirs': [
++      'include_dirs+': [
+         'include',
+         'src/',
+       ],
+@@ -55,7 +55,7 @@
+           '<@(shared_unix_defines)',
+           '<@(shared_zos_defines)',
+         ],
+-        'include_dirs': [ 'include' ],
++        'include_dirs+': [ 'include' ],
+         'conditions': [
+           ['OS == "linux"', {
+             'defines': [ '_POSIX_C_SOURCE=200112' ],
+@@ -247,6 +247,7 @@
+             'src/unix/procfs-exepath.c',
+             'src/unix/random-getrandom.c',
+             'src/unix/random-sysctl-linux.c',
++            'src/unix/epoll.c',
+           ],
+           'link_settings': {
+             'libraries': [ '-ldl', '-lrt' ],
